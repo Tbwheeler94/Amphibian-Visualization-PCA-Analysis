@@ -1,0 +1,37 @@
+---
+title: "Untitled"
+author: "Author: Tom Wheeler"
+date: "Date: 1/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(janitor)
+library(here)
+library(ggfortify) #for PCA analysis
+library(patchwork) #building compound figures
+
+```
+
+```{r}
+world_env_vars <- read_csv(here("data","world_env_vars.csv")) %>% #read in world env. variables csv
+  select(elevation, cropland_cover, tree_canopy_cover, rain_mean_annual, temp_annual_range, temp_mean_annual, wind, cloudiness) %>% #select continuous variables
+  drop_na() %>% #drop na values
+  scale() %>% #scale values
+  prcomp() #perform principle components analysis
+
+autoplot(world_env_vars,
+         loadings = TRUE,
+         loadings.label = TRUE,
+         loadings.colour = "black",
+         loadings.label.colour = "black",
+         loadings.label.vjust = -0.5
+         ) +
+  theme_minimal()
+
+  
+```
+
