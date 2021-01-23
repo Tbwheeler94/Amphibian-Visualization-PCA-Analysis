@@ -1,0 +1,78 @@
+---
+title: "Exploratory report of amphibian abundance data recorded by the Sierra Lakes Inventory Project"
+author: "Author: Tom Wheeler"
+date: "Date: 1/22/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(janitor)
+library(here)
+
+library(patchwork) #building compound figures
+library(readxl) #read in excel documents
+library(lubridate) #convert dates to R readable
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+#Wrangle data to extract mountain yellow-legged frog (Rana muscosa) count each year across all water bodies
+sierra_amphibians <- read_excel(here("data","sierra_amphibians.xlsx")) %>% #read in amphibian excel file
+  mutate(survey_date = ymd(survey_date)) %>% #convert survey date column to an R readable date formate
+  mutate(record_year = year(survey_date)) %>% #extract only year value and put in new coluumn record_year
+  filter(amphibian_life_stage != "EggMass") %>% #filter our EggMass values
+  group_by(record_year, amphibian_life_stage) %>% #group by year then amphibian lifestage to get values for each life stage by year
+  count() # get counts for each, put into column "n"
+
+#Graph mountain yellow-legged frog (Rana muscosa) count each year across all water bodies
+graph_1 <- ggplot(data = sierra_amphibians, mapping = aes(x = record_year, y = n, group = amphibian_life_stage)) +
+  geom_line(aes(color = amphibian_life_stage), show.legend = FALSE) +
+  labs(
+    title = "Counts of mountain yellow-legged frog count each year across all water bodies by life stage",
+    y = "Count of amphibian",
+    x = "Year") +
+  geom_label(label="Tadpole", x=2001, y=1125, color = "black", size=3) +
+  geom_label(label="Adult", x=2000.25, y=900, color = "black", size=3) +
+  geom_label(label="SubAdult", x=2000, y=500, color = "black", size=3) +
+  theme_minimal()
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+#Wrangle combined adult and subadult endangered mountain yellow-legged frogs (Rana muscosa) observed in the 5 lakes with the greatest total observed counts
+sierra_combined <- read_excel(here("data","sierra_amphibians.xlsx")) %>% #read in amphibian excel file
+  filter(amphibian_life_stage == "Adult" | amphibian_life_stage == "SubAdult") %>% #filter data by only adults and subadults
+  group_by(lake_id) %>% #group by lake_id to get counts for each lake_id
+  summarise(n = n()) %>% #put observation of each lake_id in a new column "n"
+  mutate(lake_text = paste("Lake",lake_id)) %>% #concatenate "Lake" in front of the lake_id values so they are easier for user to read and can be adjusted using fct_reorder
+  slice_max(n, n = 5) %>%  #select lakes with largest observation counts
+  mutate(lake_text = fct_reorder(lake_text, n, .fun = 'max')) #convert values to an ordered factor
+
+#Graph data
+graph_2 <- ggplot(data = sierra_combined, aes(x = lake_text, y = n)) +
+  geom_col() +
+  labs( 
+    title = "Counts of mountain yellow-legged frogs observed in the 5 lakes with the greatest observed counts",
+    y = "Count of amphibian",
+    x = "Lake",
+    cex.main = .25
+  ) +
+  theme_minimal()
+```
+
+## Overview
+
+## Data
+
+```{r, echo=FALSE}
+#generate compound figure
+(graph_1 / graph_2) & theme(plot.title = element_text(size=10))
+```
+
+**Figure 1:** These figures explore amphibian abundance data recorded by the Sierra Lakes Inventory Project. mountain yellow-legged frogs (Rana muscosa)
+
+## Discussion
