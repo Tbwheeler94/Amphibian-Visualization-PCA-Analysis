@@ -68,7 +68,7 @@ graph_2 <- ggplot(data = sierra_combined, aes(x = lake_text, y = n)) +
 
 ### Overview
 
-This report provides an exploratory overview of amphibian abundance recorded by the Sierra Lakes Inventory Project (SLIP) from 1995-2002. The original objective of SLIP was to describe impacts of non-native fish on lake communities, but SLIP data has subsequently enabled study of additional ecological issues, including regional amphibian declines and their impacts on communities, and impacts of non-native fish on terrestrial species. In addition, these data are being used to develop fish removal efforts to restore aquatic ecosystems and recover endangered amphibians.
+This report provides an exploratory overview of mountain yellow-legged frog (Rana muscosa) abundance recorded by the Sierra Lakes Inventory Project (SLIP) from 1995-2002. The original objective of SLIP was to describe impacts of non-native fish on lake communities, but SLIP data has subsequently enabled study of additional ecological issues, including regional amphibian declines and their impacts on communities, and impacts of non-native fish on terrestrial species. In addition, these data are being used to develop fish removal efforts to restore aquatic ecosystems and recover endangered amphibians.
 
 ![](Amphibian_Map.png){width=70%}
 
