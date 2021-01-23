@@ -76,7 +76,7 @@ This report provides an exploratory overview of mountain yellow-legged frog (Ran
 
 This data describes the physical characteristics of and surveyed aquatic communities for > 8,000 lentic water bodies in the southern Sierra Nevada, including lakes, ponds, marshes, and meadows. The SLIP data is stored in a relational database that collectively describes water bodies (e.g., depth, elevation, location), surveys (conditions, effort), and communities (including approximately 170 fish, amphibian, reptile, benthic macroinvertebrate, and zooplankton taxa).  
 
-##
+### Exploratory Findings
 
 ```{r, echo=FALSE}
 #generate compound figure
