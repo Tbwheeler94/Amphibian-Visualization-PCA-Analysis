@@ -1,11 +1,19 @@
 ---
-title: "Exploratory report of the relationship between cropland coverage and environmental factors"
+title: "Exploratory report of the relationship between cropland coverage and environmental variables"
 author: "Author: Tom Wheeler"
 date: "Date: 1/23/2021"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+### Overview & Data
+
+This report aims to understand the relationship between cropland coverage (percentage of country's total land under crop cultivation) and a variety of environmental factors including tree canopy cover, mean annual rainfall, annual temperature range, mean annual temperature, wind, and cloudiness. This environmental data used was derived using Google Earth Engine data by Kaggle user @zander_vender who calculated mean values for 243 countries at a reduction scale of about 10km. To assess these relationship I conduct a PCA analysis of the data and generate a PCA biplot which includes loadings and labels.
+
+![](Cropland_Map.jpg){width=70%}
+
+### Code Setup
+
+```{r setup, warning=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
@@ -16,15 +24,9 @@ library(patchwork) #building compound figures
 
 ```
 
-### Overview & Data
-
-This report aims to understand the relationship between cropland coverage (percentage of country's total land under crop cultivation) and a variety of environmental factors including tree canopy cover, mean annual rainfall, annual temperature range, mean annual temperature, wind, and cloudiness. This environmental data used was derived using Google Earth Engine data by Kaggle user @zander_vender who calculated mean values for 243 countries at a reduction scale of about 10km. To assess these relationship I conduct a PCA analysis of the data and generate a PCA biplot which includes loadings and labels.
-
-![](Cropland_Map.jpg){width=70%}
-
 ### Exploratory Findings
 
-```{r, echo=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE}
 world_env_vars <- read_csv(here("data","world_env_vars.csv")) %>% #read in world env. variables csv
   select(elevation, cropland_cover, tree_canopy_cover, rain_mean_annual, temp_annual_range, temp_mean_annual, wind, cloudiness) %>% #select continuous variables
   drop_na() %>% #drop na values
@@ -37,7 +39,11 @@ autoplot(world_env_vars, #generate pca biplot
          loadings.colour = "black", #make loading labels black
          loadings.label.colour = "red", #make loading labels black
          loadings.label.vjust = -0.5
-         ) +
+         ) + 
+  labs(
+    title = "PCA Biplot of Relationships Between Cropland Cover 
+    and Environmental Variables"
+  ) +
   theme_minimal()
 ```
 
